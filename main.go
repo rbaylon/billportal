@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/rbaylon/arkgatecmd"
 )
@@ -80,6 +81,7 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 			log.Println("Faile to update subsexpr table with ", remote[0])
 		}
 
+		time.Sleep(1 * time.Second)
 		log.Println("activated ", ip)
 		//redirect to landing page instead of below
 		http.Redirect(w, r, "https://www.google.com", http.StatusSeeOther)
