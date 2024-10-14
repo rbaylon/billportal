@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/rbaylon/arkgatecmd"
 )
 
 var apitoken *string
@@ -64,6 +66,12 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 			log.Println("Code error: Not Found")
 			tmpl.ExecuteTemplate(w, "errbase", nil)
 			return
+		}
+
+		pf := arkgatecmd.UpdatePFtableCmd("subsexpr", remote[0], "add")
+		err := pf.SendCmd(auth.GetUnixConn())
+		if err != nil {
+			log.Println("Faile to update subsexpr table with ", remote[0])
 		}
 
 		log.Println("activated ", ip)
