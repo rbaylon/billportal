@@ -9,8 +9,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
-	"github.com/rbaylon/arkgatecmd"
 )
 
 var apitoken *string
@@ -67,18 +65,6 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 			log.Println("Code error: Not Found")
 			tmpl.ExecuteTemplate(w, "errbase", nil)
 			return
-		}
-
-		pfdel := arkgatecmd.UpdatePFtableCmd("subsexpr", remote[0], "delete")
-		err := pfdel.SendCmd(auth.GetUnixConn())
-		if err != nil {
-			log.Println("Faile to update subsexpr table with ", remote[0])
-		}
-		time.Sleep(time.Millisecond * 100)
-		pfadd := arkgatecmd.UpdatePFtableCmd("allowed", remote[0], "add")
-		err = pfadd.SendCmd(auth.GetUnixConn())
-		if err != nil {
-			log.Println("Faile to update subsexpr table with ", remote[0])
 		}
 
 		time.Sleep(1 * time.Second)
