@@ -74,7 +74,7 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 		if err != nil {
 			log.Println("Faile to update subsexpr table with ", remote[0])
 		}
-
+		time.Sleep(time.Millisecond * 100)
 		pfadd := arkgatecmd.UpdatePFtableCmd("allowed", remote[0], "add")
 		err = pfadd.SendCmd(auth.GetUnixConn())
 		if err != nil {
