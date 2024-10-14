@@ -68,8 +68,14 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 			return
 		}
 
-		pf := arkgatecmd.UpdatePFtableCmd("subsexpr", remote[0], "add")
-		err := pf.SendCmd(auth.GetUnixConn())
+		pfdel := arkgatecmd.UpdatePFtableCmd("subsexpr", remote[0], "delete")
+		err := pfdel.SendCmd(auth.GetUnixConn())
+		if err != nil {
+			log.Println("Faile to update subsexpr table with ", remote[0])
+		}
+
+		pfadd := arkgatecmd.UpdatePFtableCmd("allowed", remote[0], "add")
+		err = pfadd.SendCmd(auth.GetUnixConn())
 		if err != nil {
 			log.Println("Faile to update subsexpr table with ", remote[0])
 		}
