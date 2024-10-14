@@ -29,6 +29,8 @@ func main() {
 		"./templates/index.tmpl",
 		"./templates/errindex.tmpl",
 		"./templates/errbase.tmpl",
+		"./templates/waitbase.tmpl",
+		"./templates/wait.tmpl",
 	}
 
 	tmpl, err := template.ParseFiles(files...)
@@ -70,6 +72,7 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 		time.Sleep(1 * time.Second)
 		log.Println("activated ", ip)
 		//redirect to landing page instead of below
-		http.Redirect(w, r, "https://www.google.com", http.StatusSeeOther)
+		//http.Redirect(w, r, "https://www.google.com", http.StatusSeeOther)
+		tmpl.ExecuteTemplate(w, "waitbase", nil)
 	}
 }
