@@ -6,7 +6,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 )
@@ -14,7 +13,8 @@ import (
 var apitoken *string
 
 type Userdata struct {
-	Ip string
+	Ip    string
+	NotDc bool
 }
 
 func main() {
@@ -55,9 +55,17 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		remote := strings.Split(r.RemoteAddr, ":")
 		log.Println("Captured: ", remote[0])
-		ip := url.QueryEscape(remote[0])
-		data := &Userdata{Ip: ip}
+		ip := strings.Replace(remote[0], ".", "", -1)
+		data := &Userdata{Ip: ip, NotDc: true}
 		if r.Method != http.MethodPost {
+			sub, err := auth.GetSub(remote[0], apitoken)
+			if err != nil {
+				log.Println("Error: ", err)
+			} else {
+				if sub.LaterCount > 20 {
+					data.NotDc = false
+				}
+			}
 			tmpl.ExecuteTemplate(w, "base", data)
 			return
 		}

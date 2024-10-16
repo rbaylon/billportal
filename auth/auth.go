@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -15,6 +16,27 @@ import (
 type Token struct {
 	Name string
 	Jwt  string
+}
+
+type Sub struct {
+	FirstName   string    `json:"first_name"`
+	LastName    string    `json:"last_name"`
+	FramedIp    string    `json:"framed_ip"`
+	Type        string    `json:"type"`
+	Status      string    `json:"status"`
+	Mac         string    `json:"mac"`
+	Loc         string    `json:"loc"`
+	Downspeed   int       `json:"downspeed"`
+	Upspeed     int       `json:"upspeed"`
+	Burstspeed  int       `json:"burstspeed"`
+	Duration    int       `json:"duration"`
+	Gateway     string    `json:"gateway"`
+	Priority    int       `json:"priority"`
+	DateEnd     time.Time `json:"date_end"`
+	DateExpires time.Time `json:"date_expires"`
+	PfconfigID  uint      `json:"pfconfig_id"`
+	DueDay      int       `json:"due_day"`
+	LaterCount  int       `json:"later_count"`
 }
 
 func GetEnvVariable(key string) string {
@@ -48,6 +70,29 @@ func ActivateSubByIp(ip string, status string, t *string) string {
 	}
 	log.Println("Code validated")
 	return v
+}
+
+func GetSub(ip string, t *string) (*Sub, error) {
+	var (
+		api_url = GetEnvVariable("API_URL")
+	)
+	url := api_url + "subs/getbyip/" + ip
+	log.Println(url)
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", *t))
+	res, _ := client.Do(req)
+	if res.StatusCode != 200 {
+		return nil, fmt.Errorf("ip not found\n")
+	}
+	defer res.Body.Close()
+	responseData, ioerr := ioutil.ReadAll(res.Body)
+	if ioerr != nil {
+		return nil, ioerr
+	}
+	var sub Sub
+	json.Unmarshal(responseData, &sub)
+	return &sub, nil
 }
 
 func GetToken() (*string, error) {
