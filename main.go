@@ -62,7 +62,7 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 			if err != nil {
 				log.Println("Error: ", err)
 			} else {
-				if sub.LaterCount > 20 {
+				if sub.LaterCount > 14 {
 					data.NotDc = false
 				}
 			}
