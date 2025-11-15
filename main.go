@@ -11,6 +11,7 @@ import (
 )
 
 var apitoken *string
+var startTime time.Time
 
 type Userdata struct {
 	Ip    string
@@ -45,14 +46,34 @@ func main() {
 		log.Println(err)
 	}
 	log.Printf("%s:%s", app_ip, app_port)
+	startTime = time.Now()
 	err = http.ListenAndServe(fmt.Sprintf("%s:%s", app_ip, app_port), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
+func refreshToken() *string {
+	limit := 1440 * time.Minute // 1day
+	uptime := time.Since(startTime) * time.Minute
+	if uptime > limit {
+		token, err := auth.GetToken()
+		if err != nil {
+			return nil
+		}
+		log.Println("Token refreshed")
+		startTime = time.Now()
+		return token
+	}
+	return nil
+}
+
 func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		newtoken := refreshToken()
+		if newtoken != nil {
+			apitoken = newtoken
+		}
 		remote := strings.Split(r.RemoteAddr, ":")
 		log.Println("Captured: ", remote[0])
 		ip := strings.Replace(remote[0], ".", "", -1)
