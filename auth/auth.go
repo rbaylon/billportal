@@ -56,7 +56,12 @@ func ActivateSubByIp(ip string, status string, t *string) string {
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", *t))
-	res, _ := client.Do(req)
+	res, autherr := client.Do(req)
+	if autherr != nil {
+		log.Println(autherr.Error())
+		res.Body.Close()
+		return autherr.Error()
+	}
 	defer res.Body.Close()
 	v := "active"
 	if res.StatusCode == 404 {
@@ -81,11 +86,16 @@ func GetSub(ip string, t *string) (*Sub, error) {
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", *t))
-	res, _ := client.Do(req)
+	res, autherr := client.Do(req)
+        if autherr != nil {
+                log.Println(autherr.Error())
+                res.Body.Close()
+                return nil, autherr
+        }
+	defer res.Body.Close()
 	if res.StatusCode != 200 {
 		return nil, fmt.Errorf("ip not found\n")
 	}
-	defer res.Body.Close()
 	responseData, ioerr := ioutil.ReadAll(res.Body)
 	if ioerr != nil {
 		return nil, ioerr
@@ -105,10 +115,11 @@ func GetToken() (*string, error) {
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", fmt.Sprintf("Basic %s", api_auth))
 	res, err := client.Do(req)
-	defer res.Body.Close()
 	if err != nil {
+		res.Body.Close()
 		return nil, err
 	}
+	defer res.Body.Close()
 	responseData, ioerr := ioutil.ReadAll(res.Body)
 	if ioerr != nil {
 		return nil, ioerr
