@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
 )
 
@@ -87,11 +88,11 @@ func GetSub(ip string, t *string) (*Sub, error) {
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", *t))
 	res, autherr := client.Do(req)
-        if autherr != nil {
-                log.Println(autherr.Error())
-                res.Body.Close()
-                return nil, autherr
-        }
+	if autherr != nil {
+		log.Println(autherr.Error())
+		res.Body.Close()
+		return nil, autherr
+	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
 		return nil, fmt.Errorf("ip not found\n")
@@ -136,4 +137,29 @@ func GetUnixConn() net.Conn {
 		log.Println("Dial error ", err)
 	}
 	return c
+}
+
+func CheckExpirationWithoutVerify(tokenStr string) (bool, error) {
+	parser := jwt.NewParser()
+	var claims jwt.MapClaims
+
+	// Parse unverified explicitly skips signature validation
+	_, _, err := parser.ParseUnverified(tokenStr, &claims)
+	if err != nil {
+		return false, err
+	}
+
+	// Extract the standard 'exp' claim safely
+	exp, err := claims.GetExpirationTime()
+	if err != nil {
+		return false, fmt.Errorf("failed to get expiration: %w", err)
+	}
+
+	if exp == nil {
+		return false, fmt.Errorf("exp claim is missing from token")
+	}
+
+	// Compare token expiration timestamp with current system time
+	isExpired := exp.Before(time.Now())
+	return isExpired, nil
 }
