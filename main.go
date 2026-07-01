@@ -98,9 +98,7 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 		}
 
 		time.Sleep(1 * time.Second)
-		log.Println("activated ", ip)
-		//redirect to landing page instead of below
-		//http.Redirect(w, r, "https://www.google.com", http.StatusSeeOther)
+		log.Println("paylater activated ", ip)
 		tmpl.ExecuteTemplate(w, "waitbase", nil)
 	}
 }

@@ -1,26 +1,8 @@
-{{define "title"}}A templated page{{end}}
+{{define "title"}}Wait page{{end}}
 {{define "wait"}}
-      <div class="px-3">
-        <div class="row min-vh-100 flex-center p-5">
-          <div class="col-12 col-xl-10 col-xxl-8">
-            <div class="row justify-content-center g-5">
-                <h2 class="text-body-secondary fw-bolder mb-3">Your internet will be back after 5 minutes.</h2>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <script>
-        var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-        var navbarTop = document.querySelector('.navbar-top');
-        if (navbarTopStyle === 'darker') {
-          navbarTop.setAttribute('data-navbar-appearance', 'darker');
-        }
-
-        var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-        var navbarVertical = document.querySelector('.navbar-vertical');
-        if (navbarVertical && navbarVerticalStyle === 'darker') {
-          navbarVertical.setAttribute('data-navbar-appearance', 'darker');
-        }
-      </script>
+    <div class="row text-row">
+      <p>
+        Please wait few minutes for reactivation. You may close this window. Thank you!
+      </p>
+    </div>
 {{end}}

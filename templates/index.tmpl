@@ -1,35 +1,31 @@
-{{define "title"}}A templated page{{end}}
+{{define "title"}}Payment Reminder{{end}}
 {{define "index"}}
-      <div class="px-3">
-        <div class="row min-vh-100 flex-center p-5">
-          <div class="col-12 col-xl-10 col-xxl-8">
-            <div class="row justify-content-center g-5">
-              <div class="col-12 col-lg-6 text-center order-lg-1"><img class="img-fluid w-lg-100 d-light-none" src="static/assets/img/myimages/Payment-Reminder.png" alt="" width="400" /><img class="img-fluid w-md-50 w-lg-100 d-dark-none" src="static/assets/img/myimages/Payment-Reminder.png" alt="" width="540" /></div>
-              <div class="col-12 col-lg-6 text-center text-lg-start"><img class="img-fluid mb-6 w-50 w-lg-75 d-dark-none" src="" alt="" /><img class="img-fluid mb-6 w-50 w-lg-75 d-light-none" src="" alt="" />
-                <h2 class="text-body-secondary fw-bolder mb-3">CCR Internet</h2>
-                <p class="text-body mb-5">Your account is overdue. Please pay your bill via Maya or GCASH 09686980551 (Kristina Criselda Baylon).</p>
-                <p class="text-body mb-5">For reconnection, please send Account #{{.Ip}} and Maya or GCASH reference number to 09686980551.</p><br/><br/>
-                {{if .NotDc}}
-                <form class="form" method="POST">
-                  <Button class="btn btn-warning mb-5" type="submit">Pay Later</Button>
-                </form>
-                {{end}}
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- First row: 1 image -->
+    <div class="row">
+      <div class="image-holder">
+        <img id="image1" src="/static/assets/img/Payment-Reminder.png" alt="Image 1">
       </div>
-      <script>
-        var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-        var navbarTop = document.querySelector('.navbar-top');
-        if (navbarTopStyle === 'darker') {
-          navbarTop.setAttribute('data-navbar-appearance', 'darker');
-        }
+    </div>
 
-        var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-        var navbarVertical = document.querySelector('.navbar-vertical');
-        if (navbarVertical && navbarVerticalStyle === 'darker') {
-          navbarVertical.setAttribute('data-navbar-appearance', 'darker');
-        }
-      </script>
+    <!-- Second row: 2 images -->
+    <div class="row">
+      <div class="image-holder">
+        <img id="image2" src="/static/assets/img/gcash.jpg" alt="Image 2">
+      </div>
+      <div class="image-holder">
+        <img id="image3" src="/static/assets/img/maya.jpg" alt="Image 3">
+      </div>
+    </div>
+
+    <div class="row text-row">
+      <p>
+        This is a gentle reminder about your overdue bill. 
+        Kindly send payments to 09686980551 gcash or maya. 
+        You may scan or download the QR code above. Thank you for your patronage.
+      </p>
+    </div>
+
+    <form class="form" method="POST">
+      <button type="submit">Pay Later</button>
+    </form>
 {{end}}
