@@ -1,0 +1,22 @@
+#!/bin/ksh
+#
+# $OpenBSD$
+#
+# rc.d script for billportal
+
+daemon_name="billportal"
+daemon_user="admin"
+daemon_execdir="/home/${daemon_user}/${daemon_name}"
+daemon="${daemon_execdir}/billportal"
+daemon_logger="daemon.info"
+pidfile="/var/run/${daemon_name}.pid"
+
+. /etc/rc.d/rc.subr
+
+pexp="${daemon}"
+
+rc_reload=NO
+
+rc_bg=YES
+
+rc_cmd $1
