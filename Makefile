@@ -14,6 +14,7 @@ install:
 	mkdir -p ${distdir}
 	install -m 755 ${app} ${distdir}/
 	cp -r templates ${distdir}/
+	cp -r static ${distdir}/
 
 dist:
 	make build
