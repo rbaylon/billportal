@@ -23,3 +23,5 @@ go.work
 *.db
 captiveportal
 billportal
+CLAUDE.md
+.claude

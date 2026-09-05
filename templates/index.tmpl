@@ -8,16 +8,18 @@
     </div>
     <div class="row text-row">
       <p>
-        This is a gentle reminder about your overdue bill. 
+        This is a gentle reminder about your overdue bill for account# {{ .Ip }}. 
         Kindly send payments to 09686980551 gcash or maya. 
         You may scan or save the QR code below. Thank you for your patronage.
       </p>
     </div>
+    {{ if .NotDc }}
     <div class="row">
       <form class="form" method="POST">
         <button type="submit">Pay Later</button>
       </form>
     </div>
+    {{ end }}
     <!-- Second row: 2 images -->
     <div class="row">
       <div class="image-holder">
