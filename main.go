@@ -45,7 +45,14 @@ func main() {
 		log.Println(err)
 	}
 	log.Printf("%s:%s", app_ip, app_port)
-	err = http.ListenAndServe(fmt.Sprintf("%s:%s", app_ip, app_port), nil)
+	srv := &http.Server{
+		Addr:              fmt.Sprintf("%s:%s", app_ip, app_port),
+		ReadHeaderTimeout: 10 * time.Second,
+		ReadTimeout:       15 * time.Second,
+		WriteTimeout:      15 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}

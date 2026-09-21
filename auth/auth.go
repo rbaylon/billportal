@@ -54,13 +54,12 @@ func ActivateSubByIp(ip string, status string, t *string) string {
 	)
 	url := api_url + "subs/activate/" + ip + "/" + status
 	log.Println(url)
-	client := &http.Client{}
+	client := &http.Client{Timeout: 10 * time.Second}
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", *t))
 	res, autherr := client.Do(req)
 	if autherr != nil {
 		log.Println(autherr.Error())
-		res.Body.Close()
 		return autherr.Error()
 	}
 	defer res.Body.Close()
@@ -84,13 +83,12 @@ func GetSub(ip string, t *string) (*Sub, error) {
 	)
 	url := api_url + "subs/getbyip/" + ip
 	log.Println(url)
-	client := &http.Client{}
+	client := &http.Client{Timeout: 10 * time.Second}
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", *t))
 	res, autherr := client.Do(req)
 	if autherr != nil {
 		log.Println(autherr.Error())
-		res.Body.Close()
 		return nil, autherr
 	}
 	defer res.Body.Close()
@@ -112,12 +110,11 @@ func GetToken() (*string, error) {
 		api_url  = GetEnvVariable("API_URL")
 	)
 	url := api_url + "login"
-	client := &http.Client{}
+	client := &http.Client{Timeout: 10 * time.Second}
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", fmt.Sprintf("Basic %s", api_auth))
 	res, err := client.Do(req)
 	if err != nil {
-		res.Body.Close()
 		return nil, err
 	}
 	defer res.Body.Close()
