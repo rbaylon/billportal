@@ -1,5 +1,5 @@
 app=billportal
-distdir=$(HOME)/${app}
+distdir=/usr/local/arkgate/${app}
 
 build:
 	go mod tidy
