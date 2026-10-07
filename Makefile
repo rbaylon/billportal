@@ -1,4 +1,5 @@
 app=billportal
+version=$(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 distdir=/usr/local/arkgate/${app}
 
 build:
@@ -20,8 +21,8 @@ dist:
 	make build
 	make install
 	cp rc.${app} ${distdir}/
-	tar -C /usr/local/arkgate/ -czvf /usr/local/arkgate/${app}.tar.gz ${app}
-	ls -l /usr/local/arkgate/${app}.tar.gz
+	tar -C /usr/local/arkgate/ -czvf /usr/local/arkgate/${app}-${version}.tar.gz ${app}
+	ls -l /usr/local/arkgate/${app}-${version}.tar.gz
 
 clean:
 	rm -rf ${distdir}
