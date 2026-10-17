@@ -10,11 +10,12 @@ import (
 	"time"
 )
 
-var apitoken *string
+var apitoken *string = new(string)
 
 type Userdata struct {
-	Ip    string
-	NotDc bool
+	Ip      string
+	NotDc   bool
+	Message string
 }
 
 func main() {
@@ -31,6 +32,8 @@ func main() {
 		"./templates/errbase.tmpl",
 		"./templates/waitbase.tmpl",
 		"./templates/wait.tmpl",
+		"./templates/adminbase.tmpl",
+		"./templates/admin.tmpl",
 	}
 
 	tmpl, err := template.ParseFiles(files...)
@@ -38,11 +41,14 @@ func main() {
 		log.Print(err.Error())
 		return
 	}
+	loadContent()
 	http.HandleFunc("/", serveTemplate(tmpl))
+	http.HandleFunc("/admin", basicAuth(adminHandler(tmpl)))
 	token, err := auth.GetToken()
-	apitoken = token
 	if err != nil {
 		log.Println(err)
+	} else {
+		apitoken = token
 	}
 	log.Printf("%s:%s", app_ip, app_port)
 	srv := &http.Server{
@@ -62,6 +68,7 @@ func refreshToken() *string {
 	expired, err := auth.CheckExpirationWithoutVerify(*apitoken)
 	if err != nil {
 		log.Println(err)
+		expired = true
 	}
 	if expired {
 		token, err := auth.GetToken()
@@ -83,7 +90,8 @@ func serveTemplate(tmpl *template.Template) http.HandlerFunc {
 		remote := strings.Split(r.RemoteAddr, ":")
 		log.Println("Captured: ", remote[0])
 		ip := strings.Replace(remote[0], ".", "", -1)
-		data := &Userdata{Ip: ip, NotDc: true}
+		message := strings.ReplaceAll(getMessage(), "{AccountNumber}", ip)
+		data := &Userdata{Ip: ip, NotDc: true, Message: message}
 		if r.Method != http.MethodPost {
 			sub, err := auth.GetSub(remote[0], apitoken)
 			if err != nil {

@@ -1,0 +1,105 @@
+{{define "adminbase"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Payment Reminder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      font-size: 14px;
+      padding: 8px;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    input[type="file"] {
+      display: block;
+    }
+
+    .preview {
+      width: 140px;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-top: 6px;
+      display: block;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 18px;
+      font-size: 15px;
+      border: none;
+      border-radius: 6px;
+      background-color: #0078d7;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .flash-ok {
+      background: #e6ffed;
+      border: 1px solid #34a853;
+      color: #1e7e34;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .flash-err {
+      background: #ffe6e6;
+      border: 1px solid #d93025;
+      color: #a50e0e;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .hint {
+      color: #666;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    {{template "admin" .}}
+  </div>
+</body>
+</html>
+{{end}}

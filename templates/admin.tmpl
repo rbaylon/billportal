@@ -1,0 +1,22 @@
+{{define "admin"}}
+<h1>Edit Payment Reminder Page</h1>
+{{if .Saved}}<div class="flash-ok">Changes saved.</div>{{end}}
+{{if .Error}}<div class="flash-err">{{.Error}}</div>{{end}}
+<form method="POST" action="/admin" enctype="multipart/form-data">
+  <label for="message">Reminder text</label>
+  <textarea id="message" name="message" maxlength="2000">{{.Message}}</textarea>
+  <div class="hint">Use <code>{AccountNumber}</code> where the subscriber's account number should appear.</div>
+
+  <label for="gcash_qr">GCash QR code</label>
+  <img class="preview" src="/static/assets/img/gcash.jpg?v={{.CacheBust}}" alt="Current GCash QR">
+  <input type="file" id="gcash_qr" name="gcash_qr" accept="image/png,image/jpeg">
+  <div class="hint">Leave empty to keep the current image.</div>
+
+  <label for="maya_qr">Maya QR code</label>
+  <img class="preview" src="/static/assets/img/maya.jpg?v={{.CacheBust}}" alt="Current Maya QR">
+  <input type="file" id="maya_qr" name="maya_qr" accept="image/png,image/jpeg">
+  <div class="hint">Leave empty to keep the current image.</div>
+
+  <button type="submit">Save changes</button>
+</form>
+{{end}}

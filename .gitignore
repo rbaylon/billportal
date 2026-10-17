@@ -21,6 +21,7 @@
 go.work
 .env
 *.db
+/data/
 captiveportal
 billportal
 CLAUDE.md
